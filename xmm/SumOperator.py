@@ -26,7 +26,7 @@ class SumOperator:
     def compile(self, build_dir: Optional[str] = None, identifier: Optional[str] = None):
         if identifier is None:
             identifier = str(uuid.uuid4()).replace('-', '')
-            assert valid_identifier(identifier), f"Invalid Identifier: {identifier}, pattern required: ^[A-Za-z0-9_]+$"
+        assert valid_identifier(identifier), f"Invalid Identifier: {identifier}, pattern required: ^[A-Za-z0-9_]+$"
         
         if build_dir is None:
             build_dir = f'build_{identifier}/'
