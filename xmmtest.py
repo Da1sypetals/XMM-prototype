@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 op = SumOperator(1, 3, "0.867325070 * c3 * (c1 * c1 * (r1 + c2) * (r1 + c2) - 1) * exp(-0.5 * c1 * c1 * (r1 + c2) * (r1 + c2))")
-op.compile()
+op.compile(identifier="mexhat_op")
 
 class XmmFn(torch.autograd.Function):
     @staticmethod

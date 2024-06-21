@@ -35,23 +35,26 @@ from ..templates.template_1_3.cuda import cuda_template_1_3
 
 
 def generate_operator_source(nrow: int, ncol: int, expression):
-    assert nrow == 1 and ncol == 3, f"Not Implemented for (nrow, ncol) = ({nrow}, {ncol})"
-    
-    CUDA_expr_forward, CUDA_derivatives = generate_expr(expression)
 
-    CUDA_expr_backward = {
-        str(k): v for k, v in CUDA_derivatives.items()
-    }
+    if nrow == 1 and ncol == 3:
+        CUDA_expr_forward, CUDA_derivatives = generate_expr(expression)
 
-    wrapper_def = cpp_template_1_3
-    cuda_def = cuda_template_1_3(CUDA_expr_forward, 
-                                 CUDA_expr_backward['r1'],
-                                 CUDA_expr_backward['c1'],
-                                 CUDA_expr_backward['c2'],
-                                 CUDA_expr_backward['c3'],
-                                 )
+        CUDA_expr_backward = {
+            str(k): v for k, v in CUDA_derivatives.items()
+        }
+
+        wrapper_def = cpp_template_1_3
+        cuda_def = cuda_template_1_3(CUDA_expr_forward, 
+                                    CUDA_expr_backward['r1'],
+                                    CUDA_expr_backward['c1'],
+                                    CUDA_expr_backward['c2'],
+                                    CUDA_expr_backward['c3'],
+                                    )
+        return wrapper_def, cuda_def
+    else:
+        raise ValueError(f"Not Implemented for (nrow, ncol) = ({nrow}, {ncol})")
     
-    return wrapper_def, cuda_def
+    
 
 
 
