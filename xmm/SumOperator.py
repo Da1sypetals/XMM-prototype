@@ -19,6 +19,7 @@ class SumOperator:
         self.ncol = ncol
         
         self.wrapper_def, self.cuda_def = generate_operator_source(nrow, ncol, expr)
+        self.expression = expr
         
         self.compiled = False
     
@@ -33,6 +34,9 @@ class SumOperator:
         if not os.path.exists(build_dir):
             os.makedirs(build_dir)
             print('Build path does not exist, creating...')
+
+        with open(os.path.join(build_dir, 'expression.txt'), "w") as file:
+            file.write(self.expression)  
 
         print(f'\n[xmm] ------------------------------ Compiling Operator: {identifier} ------------------------------\n')
 
