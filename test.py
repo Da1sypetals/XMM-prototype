@@ -21,11 +21,11 @@ trainloader = DataLoader(trainset, batch_size=128, shuffle=True)
 valloader = DataLoader(valset, batch_size=128, shuffle=False)
 
 
-# from gemmkan.net import Net
-import xmmtest
+import xmmtest as layer
+# import polynomials as layer
 model = nn.Sequential(
-    xmmtest.XmmLayer(784, 256),
-    xmmtest.XmmLayer(256, 10),
+    layer.XmmLayer(784, 256),
+    layer.XmmLayer(256, 10),
 )
 
 

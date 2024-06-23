@@ -50,9 +50,9 @@ sympy
 
 ## Example Usage 
 
-See `xmmtest.py` for example usage. 
+See `xmmtest.py` and `polynomials.py` for example usage. 
 
-The example wraps the operator into a `torch.autograd.Function` and builds a layer on top of it.
+The example code wraps the operator into a `torch.autograd.Function` and builds a layer on top of it.
 
 Core methods are `SumOperator.__init__`, `op.compile()`, `op.forward()` and `op.backward()`
 

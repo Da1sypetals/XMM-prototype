@@ -5,7 +5,7 @@ import torch.nn as nn
 # expression = "0.867325070 * c3 * (c1 * c1 * (r1 + c2) * (r1 + c2) - 1) * exp(-0.5 * c1 * c1 * (r1 + c2) * (r1 + c2))"
 expression = "c3 * (c1 * (r1 + c2) - 1) * exp(-0.5 * c1 * c1 * (r1 + c2) * (r1 + c2))"
 # expression = "c3 * exp(-c1 * r1 * r1) + c2"
-op = SumOperator(1, 2, expression)
+op = SumOperator(1, 3, expression)
 op.compile(identifier="operator_v0")
 
 class XmmFn(torch.autograd.Function):
@@ -14,15 +14,15 @@ class XmmFn(torch.autograd.Function):
 
         ctx.save_for_backward(x, scale, bias, weight)
 
-        return op.forward(x, scale, bias)
+        return op.forward(x, scale, bias, weight)
     
     @staticmethod
     def backward(ctx, grad_output):
         x, scale, bias, weight = ctx.saved_tensors
 
-        grad_x, grad_scale, grad_bias = op.backward(grad_output, x, scale, bias)
+        grad_x, grad_scale, grad_bias, grad_weight = op.backward(grad_output, x, scale, bias, weight)
 
-        return grad_x, grad_scale, grad_bias, None
+        return grad_x, grad_scale, grad_bias, grad_weight
 
 class XmmLayer(nn.Module):
     def __init__(self, in_features, out_features):
