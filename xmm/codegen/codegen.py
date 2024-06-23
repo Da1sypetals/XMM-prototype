@@ -30,29 +30,25 @@ def generate_expr(expression):
     return CUDA_expr, CUDA_derivatives
 
 
-from ..templates.template_1_3.cpp import cpp_template_1_3
-from ..templates.template_1_3.cuda import cuda_template_1_3
+# from ..templates.template_1_3.cpp import cpp_template_1_3
+# from ..templates.template_1_3.cuda import cuda_template_1_3
+
+from ..templates.cpp import generate_cpp
+from ..templates.cuda import generate_cuda
 
 
 def generate_operator_source(nrow: int, ncol: int, expression):
 
-    if nrow == 1 and ncol == 3:
-        CUDA_expr_forward, CUDA_derivatives = generate_expr(expression)
+    CUDA_expr_forward, CUDA_derivatives = generate_expr(expression)
 
-        CUDA_expr_backward = {
-            str(k): v for k, v in CUDA_derivatives.items()
-        }
+    CUDA_expr_backward = {
+        str(k): v for k, v in CUDA_derivatives.items()
+    }
 
-        wrapper_def = cpp_template_1_3
-        cuda_def = cuda_template_1_3(CUDA_expr_forward, 
-                                    CUDA_expr_backward['r1'],
-                                    CUDA_expr_backward['c1'],
-                                    CUDA_expr_backward['c2'],
-                                    CUDA_expr_backward['c3'],
-                                    )
-        return wrapper_def, cuda_def
-    else:
-        raise ValueError(f"Not Implemented for (nrow, ncol) = ({nrow}, {ncol})")
+    wrapper_def = generate_cpp(nrow, ncol)
+    cuda_def = generate_cuda(nrow, ncol, CUDA_expr_forward, CUDA_expr_backward)
+    
+    return wrapper_def, cuda_def
     
     
 

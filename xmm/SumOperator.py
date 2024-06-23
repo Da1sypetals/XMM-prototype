@@ -13,7 +13,6 @@ def valid_identifier(identifier):
 
 class SumOperator:
     def __init__(self, nrow: int, ncol: int, expr: str):
-        assert nrow == 1 and ncol == 3, f"Not Implemented for (nrow, ncol) = ({nrow}, {ncol})"
 
         self.nrow = nrow
         self.ncol = ncol

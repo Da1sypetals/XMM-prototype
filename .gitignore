@@ -4,5 +4,9 @@ build/
 .idea/
 data/
 build*
-
+gemm-example/
+testgemm.ipynb
+test-triton.ipynb
+debug/
+deprecated/
 

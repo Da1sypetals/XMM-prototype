@@ -36,9 +36,11 @@ optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
 # Define learning rate scheduler
 scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.8)
 
+num_epoch = 3
+
 # Define loss
 criterion = nn.CrossEntropyLoss()
-for epoch in range(10):
+for epoch in range(num_epoch):
     # Train
     model.train()
     with tqdm(trainloader) as pbar:
