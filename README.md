@@ -17,7 +17,7 @@ where $A_i, B_i$ are respectively **row operands** and **column operands**, and 
 1. I believe the parser part needs to be improved for robustness, so please test and report in issue if failure occurs. 
    - Writing massive test or refactoring parser is appreciated :heart:.
 2. Currently supported functions are listed in the end.
-3. The current CUDA implementation is completely not optimized. The optimization pattern is nearly identical to *GEMM* optimizations, but it may take quite a lot time to make small adjustments to fit our needs.
+3. The current CUDA implementation is completely not optimized. The optimization pattern is nearly identical to *GEMM* optimizations, but it may require careful inspection and modification to make small adjustments and fit our needs.
 
 
 
