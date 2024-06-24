@@ -26,6 +26,7 @@ where $A_i, B_i$ are respectively **row operands** and **column operands**, and 
 
 - Optimize the CUDA code.
 - Test, verify, debug or refactor the parser.
+- Further allow customization of $\sigma$ (in replacement of $\sum$), via a binary function (resembling taking a functor as parameter in `std::reduce` in C++).
 
 
 
