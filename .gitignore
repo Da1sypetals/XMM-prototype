@@ -9,4 +9,5 @@ testgemm.ipynb
 test-triton.ipynb
 debug/
 deprecated/
-
+.pkl*
+tune_tmp/

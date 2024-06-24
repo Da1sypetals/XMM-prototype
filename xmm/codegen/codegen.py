@@ -2,9 +2,20 @@ import ast
 import sympy
 from sympy import symbols, diff
 from ..preprocess import expr2ast, ast2CUDAexpr, sympy2ast, ast2sympy
+from sortedcontainers import SortedSet
 
 
-def generate_expr(expression):
+def expected_variables(nrow, ncol):
+    ss = SortedSet()
+    for r in range(1, nrow + 1):
+        ss.add(f'r{r}')
+    for c in range(1, ncol + 1):
+        ss.add(f'c{c}')
+    return ss
+
+
+
+def generate_expr(nrow, ncol, expression):
     # Step 1 & 2: Parse the expression into AST and then convert to sympy expression
     ast_tree = expr2ast(expression)
     sympy_expr = ast2sympy(ast_tree)
@@ -13,6 +24,12 @@ def generate_expr(expression):
 
     # Identify all identifiers (symbols) in the expression for differentiation
     identifiers = [str(s) for s in sympy_expr.free_symbols]
+    identifiers_set = SortedSet(identifiers)
+
+    ss = expected_variables(nrow, ncol)
+    assert ss == identifiers_set, f"Incorrect variable use!\n\n[nrow = {nrow}, ncol = {ncol}]"\
+                                    +f"\n[Expected]: {','.join(ss)}\n[Used]: {','.join(identifiers_set)}\n"\
+                                    + f"[Missing]: {','.join(ss - identifiers_set)}\n[Unexpected]:{','.join(identifiers - ss)}\n"
 
     # Step 4: Take derivatives w.r.t all identifiers and save both the sympy diff and convert back to AST
     derivative_sympy_exprs = {id: diff(sympy_expr, symbols(id)) for id in identifiers}
@@ -39,7 +56,7 @@ from ..templates.cuda import generate_cuda
 
 def generate_operator_source(nrow: int, ncol: int, expression):
 
-    CUDA_expr_forward, CUDA_derivatives = generate_expr(expression)
+    CUDA_expr_forward, CUDA_derivatives = generate_expr(nrow, ncol, expression)
 
     CUDA_expr_backward = {
         str(k): v for k, v in CUDA_derivatives.items()
