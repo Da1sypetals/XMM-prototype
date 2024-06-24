@@ -36,6 +36,7 @@ where $A_i, B_i$ are respectively **row operands** and **column operands**, and 
 astor
 torch
 sympy
+sortedcontainers
 ```
 
 
