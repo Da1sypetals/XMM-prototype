@@ -2,7 +2,7 @@ from xmm.SumOperator import SumOperator
 import torch
 import torch.nn as nn
 
-expression = "r1 * c1 + r1 * r1 * c2 + r1 * r1 * r1 * c3"
+expression = "r1 * c1 + r1 * r1 * c2 + r1 * r1 * r1 * c3 + c4"
 op = SumOperator(1, 4, expression)
 op.compile(identifier="operator_poly")
 
