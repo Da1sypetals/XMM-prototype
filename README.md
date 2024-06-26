@@ -8,7 +8,9 @@ XMM, short for **eXtended Matrix Multiplication**, allows you to define your own
 
 $Z[i,j]=\sum_k\{\mu(A_1[i,k],\dots A_{N_a}[i,k],B_1[k,j],\dots B_{N_b}[k,j])\}$
 
-where $A_i, B_i$ are respectively **row operands** and **column operands**, and $\mu$ the **combinator** is customizable.
+where $A_i, B_i$ are respectively **row operands** and **column operands**, and $\mu$ the **combinator** is customizable. 
+
+Please refer to `xmm.pdf` for more details.
 
 
 
