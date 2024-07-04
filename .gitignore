@@ -12,6 +12,8 @@ deprecated/
 .pkl*
 tune_tmp/
 sgemm/
-gemm.ipynb
+gemm.ipynb/
+extern/
+sgemm_variant/
 
 

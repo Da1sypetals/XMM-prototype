@@ -22,7 +22,8 @@ valloader = DataLoader(valset, batch_size=128, shuffle=False)
 
 
 # import xmmtest as layer
-import polynomials as layer
+# import polynomials as layer
+import v1_test as layer
 model = nn.Sequential(
     layer.XmmLayer(784, 256),
     layer.XmmLayer(256, 10),

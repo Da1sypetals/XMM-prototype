@@ -67,6 +67,22 @@ def generate_operator_source(nrow: int, ncol: int, expression):
     
     return wrapper_def, cuda_def
     
+
+from ..templates.optimize_r1c1.cpp import cpp_code as cpp_code_v1
+from ..templates.optimize_r1c1.cuda import generate_cuda as generate_cuda_v1
+
+def generate_operator_source_fwd_v1(nrow: int, ncol: int, expression):
+
+    CUDA_expr_forward, CUDA_derivatives = generate_expr(nrow, ncol, expression)
+
+    CUDA_expr_backward = {
+        str(k): v for k, v in CUDA_derivatives.items()
+    }
+
+    wrapper_def = cpp_code_v1
+    cuda_def = generate_cuda_v1(CUDA_expr_forward)
+    
+    return wrapper_def, cuda_def
     
 
 
