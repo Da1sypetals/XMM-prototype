@@ -18,6 +18,7 @@ Please refer to `xmm.pdf` for more details, about how it is generaized to both *
 2. The current CUDA implementation is completely not optimized. The optimization pattern is nearly identical to *GEMM* optimizations(shared memory -> tiling -> register caching -> prefetch/double buffering...), but it may require careful inspection and modification to make small adjustments and fit our needs. 
 - Contribution of optimizing CUDA kernels is appreciated :heart:. 
 - Please refer to `xmm/templates/cpp.py` and `xmm/templates/cuda.py` for current naive implementation.
+- A faster implementation (adapted from `sgemm_nt` in [MAGMA](https://icl.utk.edu/magma/)) is provided, **currently only for** `nrow = 1 && ncol = 1`.
 3. Further allow customization of $\sigma$ (in replacement of $\sum$), via a binary function (resembling taking a functor as parameter in `std::reduce` in C++).
 
 

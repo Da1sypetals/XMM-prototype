@@ -2,7 +2,7 @@ from xmm.SumOperator_v1 import SumOperator_v1
 import torch
 import torch.nn as nn
 
-expression = "r1 * c1"
+expression = "exp(-r1 * r1) * c1"
 op = SumOperator_v1(1, 1, expression)
 op.compile(identifier="operator_v0")
 
