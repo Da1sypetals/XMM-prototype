@@ -126,7 +126,7 @@ void bwd_launcher(const torch::PackedTensorAccessor64<float, 2> gout,
 
 {using_tensor_tuple(nrow + ncol)};
 
-torch::Tensor forward_1_3({def_forward(nrow, ncol)})
+torch::Tensor forward({def_forward(nrow, ncol)})
 {{
 
     // first check inputs!
@@ -152,7 +152,7 @@ torch::Tensor forward_1_3({def_forward(nrow, ncol)})
     return result;
 }}
 
-Tensor{nrow + ncol} backward_1_3(torch::Tensor gout, {def_forward(nrow, ncol)})
+Tensor{nrow + ncol} backward(torch::Tensor gout, {def_forward(nrow, ncol)})
 {{
 
     // first check inputs!
@@ -185,8 +185,8 @@ Tensor{nrow + ncol} backward_1_3(torch::Tensor gout, {def_forward(nrow, ncol)})
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m)
 {{
-    m.def("forward", &forward_1_3, "forward R = {nrow}, C = {ncol}");
-    m.def("backward", &backward_1_3, "backward R = {nrow}, C = {ncol}");
+    m.def("forward", &forward, "forward R = {nrow}, C = {ncol}");
+    m.def("backward", &backward, "backward R = {nrow}, C = {ncol}");
 }}
 
 """

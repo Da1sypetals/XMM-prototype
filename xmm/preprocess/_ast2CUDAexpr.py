@@ -1,12 +1,13 @@
 import ast
 from ._meta import Metadata as meta
 
-OP_MAP = {ast.Add: "+", ast.Sub: "-", ast.Mult: "*", ast.Div: "/", ast.Pow: "**"}
+OP_MAP = {ast.Add: "+", ast.Sub: "-", ast.Mult: "*", ast.Div: "/"}
+SIMPLE_OP = tuple(OP_MAP.keys())
 
 
 def ast2CUDAexpr(node):
     """
-    Recursively converts an AST node into a Tiachi expression string.
+    Recursively converts an AST node into a CUDA expression string.
     """
     if isinstance(node, ast.Num):  # Handle Num for Python versions < 3.8
         str_val = str(node.n)
@@ -18,12 +19,22 @@ def ast2CUDAexpr(node):
         return node.id
     elif isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
         return f"(-{ast2CUDAexpr(node.operand)})"
+
     elif isinstance(node, ast.BinOp):
-        left = ast2CUDAexpr(node.left)
-        right = ast2CUDAexpr(node.right)
-        # print(node)
-        op_symbol = OP_MAP[type(node.op)]
-        return f"({left} {op_symbol} {right})"
+        if isinstance(node.op, ast.Pow):
+            left = ast2CUDAexpr(node.left)
+            right = ast2CUDAexpr(node.right)
+            # implement floating point power in CUDA-C++
+            return f"powf({left}, {right})"
+        elif isinstance(node.op, SIMPLE_OP):
+            left = ast2CUDAexpr(node.left)
+            right = ast2CUDAexpr(node.right)
+            # print(node)
+            op_symbol = OP_MAP[type(node.op)]
+            return f"({left} {op_symbol} {right})"
+        else:
+            breakpoint()
+            raise TypeError(f"Unsupported Binary Operation type: {type(node.op)}")
     elif isinstance(node, ast.Call):
         if node.func.id not in meta.supported_calls:
             raise ValueError(f"Function {node.func.id} is not supported.")

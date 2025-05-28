@@ -16,4 +16,5 @@ gemm.ipynb/
 extern/
 sgemm_variant/
 gemm.ipynb
+/.ruff_cache/
 

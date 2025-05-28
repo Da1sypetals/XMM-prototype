@@ -1,4 +1,3 @@
-import astor
 import ast
 from ._meta import Metadata as meta
 
@@ -42,9 +41,12 @@ def sympy2ast(sympy_expr):
         # Handle power
         base = sympy2ast(sympy_expr.base)
         exp = sympy2ast(sympy_expr.exp)
-        if abs(exp.value - round(exp.value)) > 1e-7:
-            raise ValueError("Unsupported")
-        return make_power(base, round(exp.value))
+        if isinstance(exp, ast.Name):
+            return ast.BinOp(left=base, op=ast.Pow(), right=exp)
+        else:
+            if abs(exp.value - round(exp.value)) > 1e-7:
+                raise ValueError("Unsupported")
+            return make_power(base, round(exp.value))
         # return ast.BinOp(left=base, op=ast.Pow(), right=exp)
     elif sympy_expr.is_Function:
         # Handle supported function calls
