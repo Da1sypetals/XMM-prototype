@@ -24,6 +24,7 @@ valloader = DataLoader(valset, batch_size=128, shuffle=False)
 # import xmmtest as layer
 # import polynomials as layer
 import v1_test as layer
+
 model = nn.Sequential(
     layer.XmmLayer(784, 256),
     layer.XmmLayer(256, 10),
@@ -59,10 +60,10 @@ for epoch in range(num_epoch):
 
             _loss = loss.item()
             _acc = accuracy.item()
-            _lr = optimizer.param_groups[0]['lr']
-            pbar.set_postfix(loss=f'{_loss: .3f}', 
-                             accuracy=f'{_acc: .3f}', 
-                             lr=f'{_lr: .6f}')
+            _lr = optimizer.param_groups[0]["lr"]
+            pbar.set_postfix(
+                loss=f"{_loss: .3f}", accuracy=f"{_acc: .3f}", lr=f"{_lr: .6f}"
+            )
             # print(_loss)
 
     # Validation
@@ -84,10 +85,6 @@ for epoch in range(num_epoch):
     # Update learning rate
     scheduler.step()
 
-    print(
-        f"Epoch {epoch + 1}, Val Loss: {val_loss}, Val Accuracy: {val_accuracy}"
-    )
+    print(f"Epoch {epoch + 1}, Val Loss: {val_loss}, Val Accuracy: {val_accuracy}")
     # print(f'tanh_scale = {model.layer1.tanh_scale.view(-1)[:10]}')
     # print(f'tanh_bias = {model.layer1.tanh_bias.view(-1)[:10]}')
-
-

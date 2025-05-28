@@ -1,123 +1,135 @@
-
 def operand_params(nrow, ncol):
-    res = ''
+    res = ""
     for r in range(1, nrow + 1):
-        res += f'const torch::PackedTensorAccessor64<float, 2> r{r},\n'
+        res += f"const torch::PackedTensorAccessor64<float, 2> r{r},\n"
     for c in range(1, ncol + 1):
-        res += f'const torch::PackedTensorAccessor64<float, 2> c{c},\n'
+        res += f"const torch::PackedTensorAccessor64<float, 2> c{c},\n"
     return res
 
+
 def grad_params(nrow, ncol):
-    res = ''
+    res = ""
     for r in range(1, nrow + 1):
-        res += f'torch::PackedTensorAccessor64<float, 2> grad_r{r},\n'
+        res += f"torch::PackedTensorAccessor64<float, 2> grad_r{r},\n"
     for c in range(1, ncol + 1):
-        res += f'torch::PackedTensorAccessor64<float, 2> grad_c{c},\n'
+        res += f"torch::PackedTensorAccessor64<float, 2> grad_c{c},\n"
     return res
 
 
 def def_forward(nrow, ncol):
-    res = ''
+    res = ""
     for r in range(1, nrow + 1):
-        res += f'const torch::PackedTensorAccessor64<float, 2> a_r{r},\n'
+        res += f"const torch::PackedTensorAccessor64<float, 2> a_r{r},\n"
     for c in range(1, ncol + 1):
-        res += f'const torch::PackedTensorAccessor64<float, 2> a_c{c},\n'
+        res += f"const torch::PackedTensorAccessor64<float, 2> a_c{c},\n"
     return res
+
 
 def fetch_operands(nrow, ncol):
-    res = ''
+    res = ""
     for r in range(1, nrow + 1):
-        res += f'float r{r} = a_r{r}[im][ik];\n'
+        res += f"float r{r} = a_r{r}[im][ik];\n"
     for c in range(1, ncol + 1):
-        res += f'float c{c} = a_c{c}[in][ik];\n'
+        res += f"float c{c} = a_c{c}[in][ik];\n"
     return res
+
 
 def fetch_row_operands(nrow):
-    res = ''
+    res = ""
     for r in range(1, nrow + 1):
-        res += f'float r{r} = a_r{r}[im][ik];\n'
+        res += f"float r{r} = a_r{r}[im][ik];\n"
     return res
+
 
 def fetch_col_operands(ncol):
-    res = ''
+    res = ""
     for c in range(1, ncol + 1):
-        res += f'float c{c} = a_c{c}[in][ik];\n'
+        res += f"float c{c} = a_c{c}[in][ik];\n"
     return res
+
 
 def backward_row(nrow):
-    res = ''
+    res = ""
     for r in range(1, nrow + 1):
-        res += f'torch::PackedTensorAccessor64<float, 2> a_grad_r{r},\n'
+        res += f"torch::PackedTensorAccessor64<float, 2> a_grad_r{r},\n"
     return res
+
 
 def backward_col(ncol):
-    res = ''
+    res = ""
     for c in range(1, ncol + 1):
-        res += f'torch::PackedTensorAccessor64<float, 2> a_grad_c{c},\n'
+        res += f"torch::PackedTensorAccessor64<float, 2> a_grad_c{c},\n"
     return res
+
 
 def diff_row(nrow, diffs):
-    res = ''
+    res = ""
     for r in range(1, nrow + 1):
-        k = f'r{r}'
-        res += f'grad_r{r} += ({diffs[k]}) * gout;\n'
+        k = f"r{r}"
+        res += f"grad_r{r} += ({diffs[k]}) * gout;\n"
     return res
+
 
 def diff_col(nrow, diffs):
-    res = ''
+    res = ""
     for c in range(1, nrow + 1):
-        k = f'c{c}'
-        res += f'grad_c{c} += ({diffs[k]}) * gout;\n'
+        k = f"c{c}"
+        res += f"grad_c{c} += ({diffs[k]}) * gout;\n"
     return res
+
 
 def def_result_row(nrow):
-    res = ''
+    res = ""
     for r in range(1, nrow + 1):
-        res += f'float grad_r{r} = 0.0f;\n'
+        res += f"float grad_r{r} = 0.0f;\n"
     return res
 
+
 def def_result_col(ncol):
-    res = ''
+    res = ""
     for c in range(1, ncol + 1):
-        res += f'float grad_c{c} = 0.0f;\n'
+        res += f"float grad_c{c} = 0.0f;\n"
     return res
 
 
 def store_results_row(nrow):
-    res = ''
+    res = ""
     for r in range(1, nrow + 1):
-        res += f'a_grad_r{r}[im][ik] = grad_r{r};\n'
+        res += f"a_grad_r{r}[im][ik] = grad_r{r};\n"
     return res
 
 
 def store_results_col(ncol):
-    res = ''
+    res = ""
     for c in range(1, ncol + 1):
-        res += f'a_grad_c{c}[in][ik] = grad_c{c};\n'
+        res += f"a_grad_c{c}[in][ik] = grad_c{c};\n"
     return res
+
 
 def call_forward(nrow, ncol):
     res = []
     for r in range(1, nrow + 1):
-        res.append(f'r{r}')
+        res.append(f"r{r}")
     for c in range(1, ncol + 1):
-        res.append(f'c{c}')
-    return ', '.join(res)
+        res.append(f"c{c}")
+    return ", ".join(res)
+
 
 def call_backward_row(nrow):
     res = []
     for r in range(1, nrow + 1):
-        res.append(f'grad_r{r}')
-    return ', '.join(res)
+        res.append(f"grad_r{r}")
+    return ", ".join(res)
+
 
 def call_backward_col(ncol):
     res = []
     for c in range(1, ncol + 1):
-        res.append(f'grad_c{c}')
-    return ', '.join(res)
+        res.append(f"grad_c{c}")
+    return ", ".join(res)
 
 
-def generate_cuda(nrow, ncol, fwd_expr, bwd_expr_dict): 
+def generate_cuda(nrow, ncol, fwd_expr, bwd_expr_dict):
     # bwd expr is a dictionary
     return f"""
 

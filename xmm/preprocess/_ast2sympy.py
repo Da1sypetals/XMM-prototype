@@ -26,12 +26,13 @@ def create_symbols(node):
         elif isinstance(node.op, ast.Div):
             return left / right
         elif isinstance(node.op, ast.Pow):
-            return left ** right
+            return left**right
     elif isinstance(node, ast.Call):
         if node.func.id not in meta.supported_calls:
-            raise ValueError(f'Function {node.func.id} is not supported.')
+            raise ValueError(f"Function {node.func.id} is not supported.")
         args = [create_symbols(arg) for arg in node.args]
         return meta.call_map[node.func.id](*args)
+
 
 def ast2sympy(ast_tree):
     """

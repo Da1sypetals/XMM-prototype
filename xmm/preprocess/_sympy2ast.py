@@ -14,9 +14,8 @@ def make_power(base, exp: int):
         return ast.Constant(1)
     elif exp == 1:
         return base
-    else: # exp == 2
+    else:  # exp == 2
         return ast.BinOp(base, ast.Mult(), base)
-
 
 
 def sympy2ast(sympy_expr):
@@ -51,7 +50,7 @@ def sympy2ast(sympy_expr):
         # Handle supported function calls
         func_name = sympy_expr.func.__name__
         if func_name not in meta.supported_calls:
-            raise ValueError(f'Function {func_name} is not supported.')
+            raise ValueError(f"Function {func_name} is not supported.")
         args = [sympy2ast(arg) for arg in sympy_expr.args]
         return ast.Call(func=ast.Name(id=func_name), args=args, keywords=[])
     elif sympy_expr.is_Symbol:
@@ -61,4 +60,6 @@ def sympy2ast(sympy_expr):
         # Handle numbers
         return ast.Constant(value=sympy_expr.evalf())
     else:
-        raise NotImplementedError(f"Conversion for {type(sympy_expr)} is not implemented.")
+        raise NotImplementedError(
+            f"Conversion for {type(sympy_expr)} is not implemented."
+        )

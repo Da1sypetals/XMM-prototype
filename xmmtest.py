@@ -8,21 +8,24 @@ expression = "c3 * (c1 * (r1 + c2) - 1) * exp(-0.5 * c1 * c1 * (r1 + c2) * (r1 +
 op = SumOperator(1, 3, expression)
 op.compile(identifier="operator_v0")
 
+
 class XmmFn(torch.autograd.Function):
     @staticmethod
     def forward(ctx, x, scale, bias, weight):
-
         ctx.save_for_backward(x, scale, bias, weight)
 
         return op.forward(x, scale, bias, weight)
-    
+
     @staticmethod
     def backward(ctx, grad_output):
         x, scale, bias, weight = ctx.saved_tensors
 
-        grad_x, grad_scale, grad_bias, grad_weight = op.backward(grad_output, x, scale, bias, weight)
+        grad_x, grad_scale, grad_bias, grad_weight = op.backward(
+            grad_output, x, scale, bias, weight
+        )
 
         return grad_x, grad_scale, grad_bias, grad_weight
+
 
 class XmmLayer(nn.Module):
     def __init__(self, in_features, out_features):
@@ -34,18 +37,14 @@ class XmmLayer(nn.Module):
         self.bias = nn.Parameter(torch.zeros(out_features, in_features))
 
         self.weight = nn.Parameter(torch.empty(out_features, in_features))
-        nn.init.kaiming_uniform_(self.weight, a=(5 ** .5))
+        nn.init.kaiming_uniform_(self.weight, a=(5**0.5))
 
         self.base_activation = nn.SiLU()
 
         # Batch normalization
         self.bn = nn.BatchNorm1d(out_features)
 
-
     def forward(self, x):
-
         x = XmmFn.apply(x, self.scale, self.bias, self.weight)
 
         return self.bn(x)
-    
-
