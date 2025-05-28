@@ -39,8 +39,6 @@ class XmmLayer(nn.Module):
         self.weight = nn.Parameter(torch.empty(out_features, in_features))
         nn.init.kaiming_uniform_(self.weight, a=(5**0.5))
 
-        self.base_activation = nn.SiLU()
-
         # Batch normalization
         self.bn = nn.BatchNorm1d(out_features)
 
